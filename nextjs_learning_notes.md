@@ -608,3 +608,88 @@ Result: Slower first load, poor SEO
 - Best of both worlds! 🎉
 
 See here for more info: [SSR vs CSR comparison](./SSR_CSR_comparison.md).
+
+---
+
+## Step 8: Adding Loading States
+
+### Next.js Special/Reserved Filenames
+
+Next.js uses specific filenames to automatically wire up functionality:
+
+- `page.tsx` → The actual page/route
+- `layout.tsx` → Wraps pages (shared UI across routes)
+- `loading.tsx` → Loading UI (shown while page is fetching data)
+- `error.tsx` → Error UI (handles errors in the route)
+- `not-found.tsx` → 404 page
+- `route.ts` → API endpoints
+
+**The pattern:** Just create a file with the right name in the right folder, and Next.js automatically uses it. No imports or configuration needed!
+
+### Creating Loading States
+
+Next.js automatically shows `loading.tsx` while a page component is fetching data. Each route can have its own loading state.
+
+**Homepage loading: `src/app/loading.tsx`**
+
+```tsx
+export default function Loading() {
+  return (
+    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
+      <h1>Movie Search</h1>
+      <div style={{ marginTop: "30px" }}>
+        <p>Loading movies...</p>
+      </div>
+    </div>
+  );
+}
+```
+
+**Movie detail loading: `src/app/movie/[id]/loading.tsx`**
+
+```tsx
+export default function Loading() {
+  return (
+    <div style={{ padding: "20px", maxWidth: "1000px", margin: "0 auto" }}>
+      <p>Loading movie details...</p>
+    </div>
+  );
+}
+```
+
+### How It Works
+
+**File structure:**
+
+```
+src/app/
+├── loading.tsx              → Loading for homepage (/)
+├── page.tsx                 → Homepage
+└── movie/
+    └── [id]/
+        ├── loading.tsx      → Loading for /movie/123
+        └── page.tsx         → Movie detail page
+```
+
+**Automatic behavior:**
+
+1. User navigates to a route
+2. Next.js shows `loading.tsx` immediately
+3. Page fetches data (async operations)
+4. Once ready, `loading.tsx` is replaced with `page.tsx`
+
+### Why Both Loading Files Are Needed
+
+If you have nested routes, provide loading states for all of them (or none):
+
+- Without `movie/[id]/loading.tsx`: Navigation to movie details can cause errors
+- With both files: Smooth loading experience across all routes
+
+**Rule of thumb:** Each route segment should have its own loading state if you use `loading.tsx`.
+
+### What You Get
+
+- ✅ Automatic loading UI - no manual `useState` for loading flags
+- ✅ Better UX - users see feedback immediately
+- ✅ Route-specific loading - different loading UI for different pages
+- ✅ No code changes in your pages - Next.js handles it automatically

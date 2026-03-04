@@ -7,7 +7,7 @@ export default async function HomePage({
 }: {
   searchParams: Promise<{ searchTerm?: string }>;
 }) {
-  const { searchTerm = "Batman" } = await searchParams;
+  const { searchTerm = "Flower" } = await searchParams;
 
   const response = await fetch(
     `http://www.omdbapi.com/?s=${searchTerm}&apikey=${process.env.OMDB_API_KEY}`,
