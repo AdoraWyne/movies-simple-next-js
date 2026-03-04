@@ -826,3 +826,283 @@ const data: MovieSearchResponse = await response.json();
 - ✅ "Try Again" functionality via `reset()` function
 - ✅ Route-specific error handling
 - ✅ Better user experience when things go wrong
+
+---
+
+## Step 10: Better Styling with CSS Modules
+
+### What are CSS Modules?
+
+CSS Modules are a way to scope CSS locally to a component. Next.js supports them out of the box!
+
+**Benefits:**
+
+- ✅ No naming conflicts - styles are scoped to the component
+- ✅ Better organization - CSS lives next to your component
+- ✅ Type-safe in TypeScript
+- ✅ Automatic class name generation (prevents conflicts)
+
+### Using CSS Modules
+
+**File naming:** `ComponentName.module.css`
+
+**Example: `src/app/page.module.css`**
+
+```css
+.container {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: bold;
+  color: #1a1a1a;
+}
+```
+
+**Import and use in `src/app/page.tsx`:**
+
+```tsx
+import styles from "./page.module.css";
+
+export default function Page() {
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.title}>Hello</h1>
+    </div>
+  );
+}
+```
+
+### Styling Next.js Components: `<Link>` and `<Image>`
+
+**You CAN use `className` on both**, but there are considerations:
+
+**For `<Link>`:**
+
+```tsx
+// Option 1: className (recommended for complex styles)
+<Link href="..." className={styles.movieLink}>
+
+// Option 2: inline style (good for simple 1-2 properties)
+<Link href="..." style={{ textDecoration: "none", color: "inherit" }}>
+```
+
+Both work! Use `className` for reusable/complex styles, inline for quick simple tweaks.
+
+**For `<Image>`:**
+
+```tsx
+// className works for some properties
+<Image className={styles.poster} /> // ✅ Works for border-radius, box-shadow
+
+// But width/height work better inline due to Next.js's special handling
+<Image
+  width={300}
+  height={450}
+  style={{ width: "100%", objectFit: "cover" }} // ✅ Recommended
+/>
+```
+
+**Why the limitation?**
+
+- Next.js `<Image>` has special optimization logic for width/height
+- Inline styles are more reliable for responsive sizing
+- CSS Modules work great for other properties (borders, shadows, etc.)
+
+**Rule of thumb:**
+
+- `<Link>` → className or inline both work fine
+- `<Image>` → Use inline styles for sizing, className for everything else
+
+### Complete Styling Example
+
+**Homepage styles (`src/app/page.module.css`):**
+
+```css
+.container {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #1a1a1a;
+}
+
+.searchForm {
+  margin-bottom: 40px;
+  display: flex;
+  gap: 10px;
+}
+
+.searchInput {
+  flex: 1;
+  max-width: 500px;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #0070f3;
+}
+
+.searchButton {
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.searchButton:hover {
+  background: #0051cc;
+}
+
+.moviesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.movieCard {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  background: white;
+}
+
+.movieCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.movieInfo {
+  padding: 16px;
+}
+
+.movieTitle {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.movieYear {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.noResults {
+  text-align: center;
+  color: #666;
+  font-size: 18px;
+  margin-top: 60px;
+}
+```
+
+**Movie detail styles (`src/app/movie/[id]/page.module.css`):**
+
+```css
+.container {
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.backLink {
+  display: inline-block;
+  margin-bottom: 30px;
+  color: #0070f3;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.backLink:hover {
+  color: #0051cc;
+}
+
+.movieContent {
+  display: flex;
+  gap: 40px;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.details {
+  flex: 1;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0 0 20px 0;
+  color: #1a1a1a;
+}
+
+.info {
+  margin: 12px 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.label {
+  font-weight: 600;
+  color: #666;
+}
+
+.plot {
+  margin-top: 24px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #444;
+}
+
+.rating {
+  display: inline-block;
+  background: #ffd700;
+  color: #1a1a1a;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 18px;
+}
+```
+
+### Key Takeaways
+
+- ✅ CSS Modules scope styles to components (no conflicts)
+- ✅ Import with `import styles from "./file.module.css"`
+- ✅ Use with `className={styles.className}`
+- ✅ Both `className` and inline `style` work on `<Link>` and `<Image>`
+- ✅ For `<Image>` sizing, inline styles are more reliable
+- ✅ Keeps your code organized and maintainable

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Movie, MovieSearchResponse } from "@/types/movie";
+import styles from "./page.module.css";
 
 export default async function HomePage({
   searchParams,
@@ -20,52 +21,30 @@ export default async function HomePage({
   const data: MovieSearchResponse = await response.json();
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
-      <h1>Movie Search</h1>
-      <form action="/" method="get" style={{ marginBottom: "30px" }}>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Movie Search</h1>
+      <form action="/" method="get" className={styles.searchForm}>
         <input
           name="searchTerm"
           type="text"
           defaultValue={searchTerm}
           placeholder="Search for a movie..."
-          style={{
-            padding: "10px",
-            width: "300px",
-            marginRight: "10px",
-            fontSize: "16px",
-          }}
+          className={styles.searchInput}
         />
-        <button
-          type="submit"
-          style={{ padding: "10px 20px", fontSize: "16px" }}
-        >
+        <button type="submit" className={styles.searchButton}>
           Search
         </button>
       </form>
 
       {data.Response === "True" ? (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-            gap: "20px",
-          }}
-        >
+        <div className={styles.moviesGrid}>
           {data.Search.map((movie: Movie) => (
             <Link
               key={movie.imdbID}
               href={`/movie/${movie.imdbID}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              <div
-                style={{
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  overflow: "hidden",
-                  cursor: "pointer",
-                  transition: "transform 0.2s",
-                }}
-              >
+              <div className={styles.movieCard}>
                 <Image
                   src={
                     movie.Poster !== "N/A" ? movie.Poster : "/placeholder.png"
@@ -75,18 +54,18 @@ export default async function HomePage({
                   height={300}
                   style={{ width: "100%", height: "300px", objectFit: "cover" }}
                 />
-                <div style={{ padding: "10px" }}>
-                  <h3 style={{ margin: "0 0 5px 0", fontSize: "16px" }}>
-                    {movie.Title}
-                  </h3>
-                  <p style={{ margin: 0, color: "#666" }}>{movie.Year}</p>
+                <div className={styles.movieInfo}>
+                  <h3 className={styles.movieTitle}>{movie.Title}</h3>
+                  <p className={styles.movieYear}>{movie.Year}</p>
                 </div>
               </div>
             </Link>
           ))}
         </div>
       ) : (
-        <p>No movies found. Try a different search!</p>
+        <p className={styles.noResults}>
+          No movies found. Try a different search!
+        </p>
       )}
 
       <pre>{JSON.stringify(data, null, 2)}</pre>

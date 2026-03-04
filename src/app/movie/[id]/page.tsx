@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import styles from "./page.module.css";
 
 interface MovieDetail {
   Title: string;
@@ -30,50 +31,47 @@ export default async function MovieDetailPage({
   const movie: MovieDetail = await response.json();
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1000px", margin: "0 auto" }}>
-      <Link
-        href="/"
-        style={{
-          display: "inline-block",
-          marginBottom: "20px",
-          color: "#0070f3",
-          textDecoration: "none",
-        }}
-      >
+    <div className={styles.container}>
+      <Link href="/" className={styles.backLink}>
         ← Back to Search
       </Link>
-      <div style={{ display: "flex", gap: "30px" }}>
-        <Image
-          src={movie.Poster !== "N/A" ? movie.Poster : "/placeholder.png"}
-          width={300}
-          height={450}
-          alt={movie.Title}
-          style={{ borderRadius: "10px" }}
-        />
-        <div style={{ margin: "10px" }}>
-          <h1>{movie.Title}</h1>
-          <p>
-            <strong>Year:</strong> {movie.Year}
+      <div className={styles.movieContent}>
+        <div className={styles.posterWrapper}>
+          <Image
+            src={movie.Poster !== "N/A" ? movie.Poster : "/placeholder.png"}
+            width={300}
+            height={450}
+            alt={movie.Title}
+            className={styles.poster}
+          />
+        </div>
+        <div className={styles.details}>
+          <h1 className={styles.title}>{movie.Title}</h1>
+
+          <p className={styles.info}>
+            <span className={styles.label}>Year:</span> {movie.Year}
           </p>
-          <p>
-            <strong>Rated:</strong> {movie.Rated}
+          <p className={styles.info}>
+            <span className={styles.label}>Rated:</span> {movie.Rated}
           </p>
-          <p>
-            <strong>Runtime:</strong> {movie.Runtime}
+          <p className={styles.info}>
+            <span className={styles.label}>Runtime:</span> {movie.Runtime}
           </p>
-          <p>
-            <strong>Genre:</strong> {movie.Genre}
+          <p className={styles.info}>
+            <span className={styles.label}>Genre:</span> {movie.Genre}
           </p>
-          <p>
-            <strong>Director:</strong> {movie.Director}
+          <p className={styles.info}>
+            <span className={styles.label}>Director:</span> {movie.Director}
           </p>
-          <p>
-            <strong>Actors:</strong> {movie.Actors}
+          <p className={styles.info}>
+            <span className={styles.label}>Actors:</span> {movie.Actors}
           </p>
-          <p>
-            <strong>IMDb Rating:</strong> {movie.imdbRating}/10
+          <p className={styles.info}>
+            <span className={styles.label}>IMDb Rating:</span>{" "}
+            <span className={styles.rating}>{movie.imdbRating}/10</span>
           </p>
-          <p style={{ marginTop: "20px" }}>{movie.Plot}</p>
+
+          <p className={styles.plot}>{movie.Plot}</p>
         </div>
       </div>
     </div>
