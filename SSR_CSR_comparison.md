@@ -1,0 +1,11 @@
+| Aspect                    | SSR (Server-Side Rendering)                                                               | CSR (Client-Side Rendering)                                                                                    |
+| ------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **First Visit**           | ✅ Server sends **full HTML with data**<br>Content is immediately visible                 | 📦 Server sends **minimal HTML shell** + **entire JS bundle**<br>Browser executes JS → fetches data → renders  |
+| **Subsequent Navigation** | 📄 Server sends **lightweight data** (JSON/React component)<br>No full page reload needed | ⚡ **Client-side routing only**<br>API call for data if needed, instant route change                           |
+| **Time to First Paint**   | ⚡ **Fast**<br>HTML arrives with content                                                  | ⏳ **Slower**<br>Must download JS, execute, then fetch data                                                    |
+| **SEO**                   | ✅ **Excellent**<br>Search engines see full content immediately                           | ❌ **Poor**<br>Initial HTML is empty, content rendered later                                                   |
+| **Server Load**           | ⚠️ **Higher**<br>Server renders HTML for each request                                     | ✅ **Lower**<br>Server only serves static files                                                                |
+| **Initial Bundle Size**   | ✅ **Smaller JS**<br>Only hydration code needed initially                                 | 📦 **Larger JS**<br>Entire app bundle must be downloaded                                                       |
+| **Best For**              | • Content-heavy sites<br>• E-commerce<br>• Blogs, marketing pages<br>• Need good SEO      | • Web apps (dashboards, admin panels)<br>• Interactive apps<br>• Behind authentication<br>• SEO less important |
+
+**💡 Note:** Modern frameworks like Next.js support **hybrid approaches**, allowing you to use SSR for some pages and CSR for others, or even Static Site Generation (SSG) for pages that don't change often!
