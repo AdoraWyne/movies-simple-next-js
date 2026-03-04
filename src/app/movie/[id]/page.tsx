@@ -31,6 +31,17 @@ export default async function MovieDetailPage({
 
   return (
     <div style={{ padding: "20px", maxWidth: "1000px", margin: "0 auto" }}>
+      <Link
+        href="/"
+        style={{
+          display: "inline-block",
+          marginBottom: "20px",
+          color: "#0070f3",
+          textDecoration: "none",
+        }}
+      >
+        ← Back to Search
+      </Link>
       <div style={{ display: "flex", gap: "30px" }}>
         <Image
           src={movie.Poster !== "N/A" ? movie.Poster : "/placeholder.png"}
