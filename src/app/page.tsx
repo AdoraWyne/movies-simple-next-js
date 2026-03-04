@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Movie, MovieSearchResponse } from "@/types/movie";
 
 export default async function HomePage({
@@ -46,28 +47,37 @@ export default async function HomePage({
           }}
         >
           {data.Search.map((movie: Movie) => (
-            <div
+            <Link
               key={movie.imdbID}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                overflow: "hidden",
-              }}
+              href={`/movie/${movie.imdbID}`}
+              style={{ textDecoration: "none", color: "inherit" }}
             >
-              <Image
-                src={movie.Poster !== "N/A" ? movie.Poster : "/placeholder.png"}
-                alt={movie.Title}
-                width={200}
-                height={300}
-                style={{ width: "100%", height: "300px", objectFit: "cover" }}
-              />
-              <div style={{ padding: "10px" }}>
-                <h3 style={{ margin: "0 0 5px 0", fontSize: "16px" }}>
-                  {movie.Title}
-                </h3>
-                <p style={{ margin: 0, color: "#666" }}>{movie.Year}</p>
+              <div
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "8px",
+                  overflow: "hidden",
+                  cursor: "pointer",
+                  transition: "transform 0.2s",
+                }}
+              >
+                <Image
+                  src={
+                    movie.Poster !== "N/A" ? movie.Poster : "/placeholder.png"
+                  }
+                  alt={movie.Title}
+                  width={200}
+                  height={300}
+                  style={{ width: "100%", height: "300px", objectFit: "cover" }}
+                />
+                <div style={{ padding: "10px" }}>
+                  <h3 style={{ margin: "0 0 5px 0", fontSize: "16px" }}>
+                    {movie.Title}
+                  </h3>
+                  <p style={{ margin: 0, color: "#666" }}>{movie.Year}</p>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       ) : (
