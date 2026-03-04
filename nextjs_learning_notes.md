@@ -693,3 +693,136 @@ If you have nested routes, provide loading states for all of them (or none):
 - ✅ Better UX - users see feedback immediately
 - ✅ Route-specific loading - different loading UI for different pages
 - ✅ No code changes in your pages - Next.js handles it automatically
+
+---
+
+## Step 9: Error Handling
+
+### Using `error.tsx` - Error Boundaries
+
+Next.js uses `error.tsx` to automatically catch errors in your route. Error boundaries must be Client Components because they need interactivity (onClick, state).
+
+**Homepage error: `src/app/error.tsx`**
+
+```tsx
+"use client";
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
+      <h1>Oops! Something went wrong</h1>
+      <p style={{ color: "red", marginTop: "20px" }}>
+        {error.message || "Failed to load movies"}
+      </p>
+      <button
+        onClick={reset}
+        style={{
+          marginTop: "20px",
+          padding: "10px 20px",
+          fontSize: "16px",
+          cursor: "pointer",
+        }}
+      >
+        Try Again
+      </button>
+    </div>
+  );
+}
+```
+
+**Movie detail error: `src/app/movie/[id]/error.tsx`**
+
+```tsx
+"use client";
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <div style={{ padding: "20px", maxWidth: "1000px", margin: "0 auto" }}>
+      <h1>Failed to load movie</h1>
+      <p style={{ color: "red", marginTop: "20px" }}>
+        {error.message || "Something went wrong"}
+      </p>
+      <button
+        onClick={reset}
+        style={{
+          marginTop: "20px",
+          padding: "10px 20px",
+          fontSize: "16px",
+          cursor: "pointer",
+        }}
+      >
+        Try Again
+      </button>
+    </div>
+  );
+}
+```
+
+### Key Points About Error Boundaries
+
+**Why `"use client"`?**
+
+- Error boundaries need interactivity (`onClick`, internal state)
+- Must be Client Components
+
+**What gets caught?**
+
+- JavaScript errors/exceptions thrown in Server Components
+- Network failures
+- Errors you explicitly throw
+
+**What doesn't get caught?**
+
+- API responses with error messages (e.g., `{ "Response": "False" }`)
+- These are valid responses, not exceptions
+
+### Production-Ready Error Handling
+
+Handle different scenarios appropriately:
+
+```tsx
+// In your page.tsx
+const response = await fetch(
+  `http://www.omdbapi.com/?s=${searchTerm}&apikey=${process.env.OMDB_API_KEY}`
+);
+
+// Throw error for network/server failures
+if (!response.ok) {
+  throw new Error("Failed to fetch movies from API");
+}
+
+const data: MovieSearchResponse = await response.json();
+
+// Handle "no results" as a normal UI state (not an error)
+// This is in your JSX:
+{data.Response === "True" ? (
+  // Show movies
+) : (
+  <p>No movies found. Try a different search!</p>
+)}
+```
+
+**The Pattern:**
+
+- **Errors** (500 status, network issues, exceptions) → Caught by `error.tsx`
+- **Empty/invalid results** (valid API response, just no data) → Show friendly message in UI
+
+### What You Get
+
+- ✅ Automatic error catching - no manual try-catch in every component
+- ✅ User-friendly error UI
+- ✅ "Try Again" functionality via `reset()` function
+- ✅ Route-specific error handling
+- ✅ Better user experience when things go wrong

@@ -12,6 +12,11 @@ export default async function HomePage({
   const response = await fetch(
     `http://www.omdbapi.com/?s=${searchTerm}&apikey=${process.env.OMDB_API_KEY}`,
   );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch movies from API");
+  }
+
   const data: MovieSearchResponse = await response.json();
 
   return (
