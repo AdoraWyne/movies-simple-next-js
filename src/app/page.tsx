@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Movie, MovieSearchResponse } from "@/types/movie";
 
 export default async function HomePage({
   searchParams,
@@ -10,7 +11,7 @@ export default async function HomePage({
   const response = await fetch(
     `http://www.omdbapi.com/?s=${searchTerm}&apikey=${process.env.OMDB_API_KEY}`,
   );
-  const data = await response.json();
+  const data: MovieSearchResponse = await response.json();
 
   return (
     <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
@@ -44,7 +45,7 @@ export default async function HomePage({
             gap: "20px",
           }}
         >
-          {data.Search.map((movie: any) => (
+          {data.Search.map((movie: Movie) => (
             <div
               key={movie.imdbID}
               style={{
