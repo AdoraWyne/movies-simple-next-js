@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default async function HomePage({
   searchParams,
 }: {
@@ -51,9 +53,11 @@ export default async function HomePage({
                 overflow: "hidden",
               }}
             >
-              <img
+              <Image
                 src={movie.Poster !== "N/A" ? movie.Poster : "/placeholder.png"}
                 alt={movie.Title}
+                width={200}
+                height={300}
                 style={{ width: "100%", height: "300px", objectFit: "cover" }}
               />
               <div style={{ padding: "10px" }}>
